@@ -129,11 +129,11 @@ const Datapath = () => {
     const getInstructionImage = (currentStage: IStage) => {
         const instructionFromStage = getInstructionFromStage(currentStage);
         if (instructionFromStage?.id == null) {
-            if (currentStage.number == 1 || hasLastStage == null || hasLastStage.id === 3) return `/assets/datapath/initial/pb${currentStage.number}.png`;
-            return `/assets/datapath/initial/pb_${hasLastStage.fileName}${currentStage.number}.png`;
+            if (currentStage.number == 1 || hasLastStage == null || hasLastStage.id === 3) return `./assets/datapath/initial/pb${currentStage.number}.png`;
+            return `./assets/datapath/initial/pb_${hasLastStage.fileName}${currentStage.number}.png`;
         };
-        if (hasLastStage == null || hasLastStage.id === 3) return instructionFromStage.dataPath + instructionFromStage.fileName + `_${currentStage.number}.png`;
-        return instructionFromStage.dataPath + instructionFromStage.fileName + `_${hasLastStage.fileName}_${currentStage.number}.png`;
+        if (hasLastStage == null || hasLastStage.id === 3) return '.' + instructionFromStage.dataPath + instructionFromStage.fileName + `_${currentStage.number}.png`;
+        return '.' + instructionFromStage.dataPath + instructionFromStage.fileName + `_${hasLastStage.fileName}_${currentStage.number}.png`;
     };
 
     const handleNext = () =>{
