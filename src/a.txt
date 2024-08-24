@@ -1,0 +1,353 @@
+                    {/* {
+                        instrucao===1 && <>
+                        <TextField 
+                            size='small'
+                            label='Registrador destino'
+                            variant='filled'
+                            select
+                            onChange={(e)=>{
+                                setRegDest(e.target.value)
+                            }}
+                            sx={{
+                                width:'200px',
+                                backgroundColor: 'white', // Fundo sempre branco
+                                '& .MuiFilledInput-root': {
+                                    backgroundColor: 'white', // Fundo do campo de entrada sempre branco
+                                    '&:hover': {
+                                        backgroundColor: 'white', // Fundo no hover sempre branco
+                                    },
+                                    '&.Mui-focused': {
+                                        backgroundColor: 'white', // Fundo ao focar sempre branco
+                                    },
+                                },
+                                '& .MuiInputLabel-root': {
+                                    color: 'black', // Cor do label sempre preta
+                                },
+                                '& .MuiFilledInput-input': {
+                                    color: 'black', // Cor do texto sempre preta
+                                },
+                            }}
+                        >
+                            {
+
+                            }
+                            <MenuItem value={0}>t0</MenuItem>
+                            <MenuItem value={1}>t1</MenuItem>
+                            <MenuItem value={2}>t2</MenuItem>
+                            <MenuItem value={3}>t3</MenuItem>
+                            <MenuItem value={4}>t4</MenuItem>
+                            <MenuItem value={5}>t5</MenuItem>
+                            <MenuItem value={6}>t6</MenuItem>
+                            <MenuItem value={7}>t7</MenuItem>
+                            <MenuItem value={8}>t8</MenuItem>
+                            <MenuItem value={9}>t9</MenuItem>
+                        </TextField>
+                        <TextField 
+                            size='small'
+                            label='Registrador 1'
+                            variant='filled'
+                            select
+                            onChange={(e)=>{
+                                setReg1(e.target.value)
+                            }}
+                            sx={{
+                                width:'200px',
+                                backgroundColor: 'white', // Fundo sempre branco
+                                '& .MuiFilledInput-root': {
+                                    backgroundColor: 'white', // Fundo do campo de entrada sempre branco
+                                    '&:hover': {
+                                        backgroundColor: 'white', // Fundo no hover sempre branco
+                                    },
+                                    '&.Mui-focused': {
+                                        backgroundColor: 'white', // Fundo ao focar sempre branco
+                                    },
+                                },
+                                '& .MuiInputLabel-root': {
+                                    color: 'black', // Cor do label sempre preta
+                                },
+                                '& .MuiFilledInput-input': {
+                                    color: 'black', // Cor do texto sempre preta
+                                },
+                            }}
+                        >
+                            <MenuItem value={0}>t0</MenuItem>
+                            <MenuItem value={1}>t1</MenuItem>
+                            <MenuItem value={2}>t2</MenuItem>
+                            <MenuItem value={3}>t3</MenuItem>
+                            <MenuItem value={4}>t4</MenuItem>
+                            <MenuItem value={5}>t5</MenuItem>
+                            <MenuItem value={6}>t6</MenuItem>
+                            <MenuItem value={7}>t7</MenuItem>
+                            <MenuItem value={8}>t8</MenuItem>
+                            <MenuItem value={9}>t9</MenuItem>
+                        </TextField>
+                        <TextField 
+                            size='small'
+                            label='Registrador 2'
+                            variant='filled'
+                            select
+                            onChange={(e)=>{
+                               setReg2(e.target.value)
+                            }}
+                            sx={{
+                                width:'200px',
+                                backgroundColor: 'white', // Fundo sempre branco
+                                '& .MuiFilledInput-root': {
+                                    backgroundColor: 'white', // Fundo do campo de entrada sempre branco
+                                    '&:hover': {
+                                        backgroundColor: 'white', // Fundo no hover sempre branco
+                                    },
+                                    '&.Mui-focused': {
+                                        backgroundColor: 'white', // Fundo ao focar sempre branco
+                                    },
+                                },
+                                '& .MuiInputLabel-root': {
+                                    color: 'black', // Cor do label sempre preta
+                                },
+                                '& .MuiFilledInput-input': {
+                                    color: 'black', // Cor do texto sempre preta
+                                },
+                            }}
+                        >
+                            <MenuItem value={0}>t0</MenuItem>
+                            <MenuItem value={1}>t1</MenuItem>
+                            <MenuItem value={2}>t2</MenuItem>
+                            <MenuItem value={3}>t3</MenuItem>
+                            <MenuItem value={4}>t4</MenuItem>
+                            <MenuItem value={5}>t5</MenuItem>
+                            <MenuItem value={6}>t6</MenuItem>
+                            <MenuItem value={7}>t7</MenuItem>
+                            <MenuItem value={8}>t8</MenuItem>
+                            <MenuItem value={9}>t9</MenuItem>
+                        </TextField>
+
+                        </>
+                    }
+
+                    {
+                        instrucao===2 && <>
+                        <TextField 
+                            size='small'
+                            label='Registrador destino'
+                            variant='filled'
+                            select
+                            onChange={(e)=>{
+                                setRegDest(e.target.value)
+                            }}
+                            sx={{
+                                width:'200px',
+                                backgroundColor: 'white', // Fundo sempre branco
+                                '& .MuiFilledInput-root': {
+                                    backgroundColor: 'white', // Fundo do campo de entrada sempre branco
+                                    '&:hover': {
+                                        backgroundColor: 'white', // Fundo no hover sempre branco
+                                    },
+                                    '&.Mui-focused': {
+                                        backgroundColor: 'white', // Fundo ao focar sempre branco
+                                    },
+                                },
+                                '& .MuiInputLabel-root': {
+                                    color: 'black', // Cor do label sempre preta
+                                },
+                                '& .MuiFilledInput-input': {
+                                    color: 'black', // Cor do texto sempre preta
+                                },
+                            }}
+                        >
+                            <MenuItem value={0}>t0</MenuItem>
+                            <MenuItem value={1}>t1</MenuItem>
+                            <MenuItem value={2}>t2</MenuItem>
+                            <MenuItem value={3}>t3</MenuItem>
+                            <MenuItem value={4}>t4</MenuItem>
+                            <MenuItem value={5}>t5</MenuItem>
+                            <MenuItem value={6}>t6</MenuItem>
+                            <MenuItem value={7}>t7</MenuItem>
+                            <MenuItem value={8}>t8</MenuItem>
+                            <MenuItem value={9}>t9</MenuItem>
+                        </TextField>
+                        <TextField 
+                            size='small'
+                            label='Registrador 1'
+                            variant='filled'
+                            select
+                            onChange={(e)=>{
+                                setReg1(e.target.value)
+                            }}
+                            sx={{
+                                width:'200px',
+                                backgroundColor: 'white', // Fundo sempre branco
+                                '& .MuiFilledInput-root': {
+                                    backgroundColor: 'white', // Fundo do campo de entrada sempre branco
+                                    '&:hover': {
+                                        backgroundColor: 'white', // Fundo no hover sempre branco
+                                    },
+                                    '&.Mui-focused': {
+                                        backgroundColor: 'white', // Fundo ao focar sempre branco
+                                    },
+                                },
+                                '& .MuiInputLabel-root': {
+                                    color: 'black', // Cor do label sempre preta
+                                },
+                                '& .MuiFilledInput-input': {
+                                    color: 'black', // Cor do texto sempre preta
+                                },
+                            }}
+                        >
+                            <MenuItem value={0}>t0</MenuItem>
+                            <MenuItem value={1}>t1</MenuItem>
+                            <MenuItem value={2}>t2</MenuItem>
+                            <MenuItem value={3}>t3</MenuItem>
+                            <MenuItem value={4}>t4</MenuItem>
+                            <MenuItem value={5}>t5</MenuItem>
+                            <MenuItem value={6}>t6</MenuItem>
+                            <MenuItem value={7}>t7</MenuItem>
+                            <MenuItem value={8}>t8</MenuItem>
+                            <MenuItem value={9}>t9</MenuItem>
+                        </TextField>
+                        <TextField 
+                            size='small'
+                            label='Imediato'
+                            variant='filled'
+                            type='number'
+                            onChange={(e)=>{
+                                setImm(e.target.value)
+                            }}
+                            sx={{
+                                width:'200px',
+                                backgroundColor: 'white', // Fundo sempre branco
+                                '& .MuiFilledInput-root': {
+                                    backgroundColor: 'white', // Fundo do campo de entrada sempre branco
+                                    '&:hover': {
+                                        backgroundColor: 'white', // Fundo no hover sempre branco
+                                    },
+                                    '&.Mui-focused': {
+                                        backgroundColor: 'white', // Fundo ao focar sempre branco
+                                    },
+                                },
+                                '& .MuiInputLabel-root': {
+                                    color: 'black', // Cor do label sempre preta
+                                },
+                                '& .MuiFilledInput-input': {
+                                    color: 'black', // Cor do texto sempre preta
+                                },
+                            }}
+                        >
+                          
+                        </TextField>
+
+                        </>
+                    }
+
+                    {
+                        instrucao===3 && <>
+                        <TextField 
+                            size='small'
+                            label='Registrador 1'
+                            variant='filled'
+                            select
+                            onChange={(e)=>{
+                                setReg1(e.target.value)
+                            }}
+                            sx={{
+                                width:'200px',
+                                backgroundColor: 'white', // Fundo sempre branco
+                                '& .MuiFilledInput-root': {
+                                    backgroundColor: 'white', // Fundo do campo de entrada sempre branco
+                                    '&:hover': {
+                                        backgroundColor: 'white', // Fundo no hover sempre branco
+                                    },
+                                    '&.Mui-focused': {
+                                        backgroundColor: 'white', // Fundo ao focar sempre branco
+                                    },
+                                },
+                                '& .MuiInputLabel-root': {
+                                    color: 'black', // Cor do label sempre preta
+                                },
+                                '& .MuiFilledInput-input': {
+                                    color: 'black', // Cor do texto sempre preta
+                                },
+                            }}
+                        >
+                            <MenuItem value={0}>t0</MenuItem>
+                            <MenuItem value={1}>t1</MenuItem>
+                            <MenuItem value={2}>t2</MenuItem>
+                            <MenuItem value={3}>t3</MenuItem>
+                            <MenuItem value={4}>t4</MenuItem>
+                            <MenuItem value={5}>t5</MenuItem>
+                            <MenuItem value={6}>t6</MenuItem>
+                            <MenuItem value={7}>t7</MenuItem>
+                            <MenuItem value={8}>t8</MenuItem>
+                            <MenuItem value={9}>t9</MenuItem>
+                        </TextField>
+                        <TextField 
+                            size='small'
+                            label='Registrador 2'
+                            variant='filled'
+                            select
+                            onChange={(e)=>{
+                                setReg2(e.target.value)
+                            }}
+                            sx={{
+                                width:'200px',
+                                backgroundColor: 'white', // Fundo sempre branco
+                                '& .MuiFilledInput-root': {
+                                    backgroundColor: 'white', // Fundo do campo de entrada sempre branco
+                                    '&:hover': {
+                                        backgroundColor: 'white', // Fundo no hover sempre branco
+                                    },
+                                    '&.Mui-focused': {
+                                        backgroundColor: 'white', // Fundo ao focar sempre branco
+                                    },
+                                },
+                                '& .MuiInputLabel-root': {
+                                    color: 'black', // Cor do label sempre preta
+                                },
+                                '& .MuiFilledInput-input': {
+                                    color: 'black', // Cor do texto sempre preta
+                                },
+                            }}
+                        >
+                            <MenuItem value={0}>t0</MenuItem>
+                            <MenuItem value={1}>t1</MenuItem>
+                            <MenuItem value={2}>t2</MenuItem>
+                            <MenuItem value={3}>t3</MenuItem>
+                            <MenuItem value={4}>t4</MenuItem>
+                            <MenuItem value={5}>t5</MenuItem>
+                            <MenuItem value={6}>t6</MenuItem>
+                            <MenuItem value={7}>t7</MenuItem>
+                            <MenuItem value={8}>t8</MenuItem>
+                            <MenuItem value={9}>t9</MenuItem>
+                        </TextField>
+                        <TextField 
+                            size='small'
+                            label='Imediato'
+                            variant='filled'
+                            type='number'
+                            onChange={(e)=>{
+                                setImm(e.target.value)
+                            }}
+                            sx={{
+                                width:'200px',
+                                backgroundColor: 'white', // Fundo sempre branco
+                                '& .MuiFilledInput-root': {
+                                    backgroundColor: 'white', // Fundo do campo de entrada sempre branco
+                                    '&:hover': {
+                                        backgroundColor: 'white', // Fundo no hover sempre branco
+                                    },
+                                    '&.Mui-focused': {
+                                        backgroundColor: 'white', // Fundo ao focar sempre branco
+                                    },
+                                },
+                                '& .MuiInputLabel-root': {
+                                    color: 'black', // Cor do label sempre preta
+                                },
+                                '& .MuiFilledInput-input': {
+                                    color: 'black', // Cor do texto sempre preta
+                                },
+                            }}
+                        >
+                          
+                        </TextField>
+
+                        </>
+                    } */}
