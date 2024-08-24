@@ -33,7 +33,8 @@ const Sw =
     },
     ExToMem: (
         stagesData: IStageData[],
-        setStagesData: Dispatch<SetStateAction<IStageData[]>>
+        setStagesData: Dispatch<SetStateAction<IStageData[]>>,
+        setDataMemory: Dispatch<SetStateAction<IDataMemory[]>>
     ) => {
         const id_ex_imm = stagesData.find(el => el.code === 'id_ex_imm')?.value;
         const id_ex_a = stagesData.find(el => el.code === 'id_ex_a')?.value;
@@ -51,11 +52,16 @@ const Sw =
                 return el;
             })
         );
+        setDataMemory(data =>
+            data.map(el => {
+                if (el.address === ex_mem_alu_output) el.value = Number(id_ex_b);
+                return el;
+            })
+        );
     },
     MemToWb: (
         stagesData: IStageData[],
-        setStagesData: Dispatch<SetStateAction<IStageData[]>>,
-        setDataMemory: Dispatch<SetStateAction<IDataMemory[]>>
+        setStagesData: Dispatch<SetStateAction<IStageData[]>>
     ) => {
         const ex_mem_b = stagesData.find(el => el.code === 'ex_mem_b')?.value;
         const ex_mem_rd = stagesData.find(el => el.code === 'ex_mem_rd')?.value;
@@ -66,12 +72,6 @@ const Sw =
                 if (el.code === 'mem_wb_lmd') el.value = null;
                 if (el.code === 'mem_wb_alu_output') el.value = null;
                 if (el.code === 'mem_wb_rd') el.value = ex_mem_rd;
-                return el;
-            })
-        );
-        setDataMemory(data =>
-            data.map(el => {
-                if (el.address === ex_mem_alu_output) el.value = Number(ex_mem_b);
                 return el;
             })
         );
@@ -102,14 +102,14 @@ const Sw =
         if (stageNumber === EXECUTION_STAGE_ID) {
             Sw.ExToMem(
                 stagesData,
-                setStagesData
+                setStagesData,
+                setDataMemory
             );
         };
         if (stageNumber === MEMORY_STAGE_ID) {
             Sw.MemToWb(
                 stagesData,
-                setStagesData,
-                setDataMemory
+                setStagesData
             );
         };
     }

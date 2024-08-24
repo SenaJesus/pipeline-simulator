@@ -1,6 +1,6 @@
 
-import PipeTable from '../pipeTable/pipeTable';
-import { Box, Grid, Typography, Button, TextField, Autocomplete } from '@mui/material';
+import InstructionMemoryTable from '../instructionMemoryTable/instructionMemoryTable';
+import { Box, Grid, Typography, Button, TextField, Autocomplete,Container } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { IInstruction, IStage, IInstructionMemory, IDataMemory, IRegisterMemory, IStageData, IAddInstruction } from '../../interfaces/datapathInterfaces';
 import {
@@ -17,6 +17,7 @@ import Form from '../form/form';
 import { toast } from 'react-toastify';
 import ToastError from '../toastError/toastError';
 import 'react-toastify/dist/ReactToastify.css';
+import EditTable from '../editTable/editTable';
 
 
 const Datapath = () => {
@@ -24,8 +25,10 @@ const Datapath = () => {
     const [pc, setPc] = useState<number>(0);
     const [registers, setRegisters] = useState<IRegisterMemory[]>(INITIAL_REGISTERS);
     const [dataMemory, setDataMemory] = useState<IDataMemory[]>(INITIAL_DATA_MEMORY);
-    const [instructionMemory, setInstructionMemory] = useState<IInstructionMemory[]>([]); // fazer aqui a listagem das instrucoes
+    const [instructionMemory, setInstructionMemory] = useState<IInstructionMemory[]>([]);
     const [stagesData, setStagesData] = useState<IStageData[]>(INITIAL_STAGES_DATA);
+    const [ciclos, setCiclos] = useState<any>([]);
+    const [disableNext,setDisableNext] = useState<boolean>(false);
     
     // variavel para dizer se vai mudar ou nao os outros
     const [hasLastStage, setHasLastStage] = useState<IInstruction | null>(null);
@@ -37,9 +40,7 @@ const Datapath = () => {
         reg1:null,
         reg2:null,
         regDest:null,
-    })
-    const [ciclos,setCiclos] = useState<any>([])
-  
+    });
 
     const addInstruction = (addInstructionObj: IAddInstruction) => {
         const instruction = BASIC_INSTRUCTIONS.find(el => el.id === addInstructionObj.instructionId);
@@ -60,21 +61,32 @@ const Datapath = () => {
         );
     };
 
+    const resetSimulatorData = () => {
+        setStages(INITIAL_STAGES);
+        setRegisters(INITIAL_REGISTERS);
+        setDataMemory(INITIAL_DATA_MEMORY);
+        setStagesData(INITIAL_STAGES_DATA);
+        setCiclos([]);
+    };
+
+    const resetInstructions = () => setInstructionMemory([]);
+    const resetProgramCounter = () => setPc(0);
+    const resetCiclos = () => setCiclos([]);
+
     const executeNextInstructions = (hazard : boolean) => {
         for (let i = 4; i >= 0; i--)
         {
             const stage = stages[i];
             if ((stage.number === INSTRUCTION_FETCH_STAGE_ID || stage.number === INSTRUCTION_DECODE_STAGE_ID) && hazard) continue;
-            console.log('---------', i, stage.instructionAddress)
             if (stage.instructionAddress == null) continue;
             const instructionFromMemory = instructionMemory.find(el => el.address === stage.instructionAddress);
-            console.log('---------', instructionFromMemory)
             if (instructionFromMemory == null) return;
-            console.log(stage.number);
             if (stage.number === INSTRUCTION_FETCH_STAGE_ID) {
-                console.log('a primeira vez eu chego aqui')
+               
                 setStagesData(data => data.map(el => {
-                    if (el.code === 'if_id_pc') el.value = pc;
+                    if (el.code === 'if_id_pc'){ 
+                        el.value = pc;
+                    }
                     if (el.code === 'if_id_ir') el.value = instructionFromMemory.syntax;
                     return el;
                 }));
@@ -141,6 +153,7 @@ const Datapath = () => {
          // quando vai ser?
          
         const newStages = [...stages];
+      
         
         let pausa=false;
         for(let i = 2;i<=3;i++){
@@ -148,10 +161,13 @@ const Datapath = () => {
             const instructionFromMemory1 = instructionMemory.find(el => el.address === stages[1].instructionAddress);
             if (!instructionFromMemoryI || !instructionFromMemory1) continue;
             if( (instructionFromMemoryI.regDest === instructionFromMemory1.reg1 || instructionFromMemoryI.regDest === instructionFromMemory1.reg2) && instructionFromMemoryI !== null ){
-                console.log('pausa true')
+            
                 pausa=true;
             }
         }
+        
+        executeNextInstructions(pausa);
+
         if(newStages[0].instructionAddress !== null && !pausa){
             setPc(pc + 4);
             pc_real=pc+4;
@@ -159,17 +175,16 @@ const Datapath = () => {
         else{
             pc_real=pc;
         }
-       
-        setCiclos([...ciclos, JSON.parse(JSON.stringify(stagesData))]);
+        
         if(!pausa){
             for (let i = newStages.length - 1; i > 0; i--) {
                 newStages[i].instructionAddress = newStages[i - 1].instructionAddress;
             };
 
             newStages[0].instructionAddress = null;
-            console.log('pc: ',pc_real)
+           
             const nova_instrucao = instructionMemory.find( el=> el.address === pc_real )
-            console.log('nova instrucao: ',nova_instrucao)
+           
             if (nova_instrucao) {
                 newStages[0].instructionAddress = nova_instrucao.address
             }
@@ -183,151 +198,280 @@ const Datapath = () => {
             newStages[2].instructionAddress = null;
             setStages(newStages);
         };
-        console.log(newStages);
-        executeNextInstructions(pausa);
+        const pcValue = stagesData.find(el => el.code === 'if_id_pc');
+        setHandleNextButton(true);
     };
 
+    const [handleNextButton, setHandleNextButton] = useState<boolean>(false);
+
     useEffect(()=>{
-        console.log(instructionToEnter);
-    }, [instructionToEnter])
+        if (!handleNextButton) return;
+        setCiclos([...ciclos, JSON.parse(JSON.stringify(stagesData))]);
+        setHandleNextButton(false);
+    }, [handleNextButton]);
+    const [ad,setAd] = useState<boolean>(false);
+    useEffect(()=>{
+        setDisableNext(handleDisabledNextClock());
+    }, [handleNextButton,ad]);
+
+    const handleDisabledNextClock = () => stages.every(el => el.instructionAddress === null) && !instructionMemory.find(el => el.address === pc);
 
     return (<>
         <ToastError />
-        <Grid container 
-            sx={{
-                backgroundColor: '#ffdb74',
-                padding:'10px',
-            }}
-            spacing={2}
-        >
-            <Grid item xs={8}>
-                <Grid container spacing={2}>
-                    <Grid item xs={3} >
-                        <Autocomplete
-                            options={BASIC_INSTRUCTIONS}
-                            getOptionLabel={(instruction) => instruction.name}
-                            size='small'
-                            fullWidth
-                            renderInput={(params) => <TextField {...params} label="Instruction" />}
-                            onChange={(_,newValue) =>{
-                                setInstrucao(newValue ? newValue.name :null)
-                                console.log(newValue);
-                                if(newValue){
-                                    setInstructionToEnter({
-                                        instructionId : newValue.id,
-                                        imm:null,
-                                        reg1:null,
-                                        reg2:null,
-                                        regDest:null,
-                                    });
-                                }
-                            }}
-                            noOptionsText="None instruction is available"
-                        />
-                    </Grid>
-                    <Grid item xs={9}>
-                        <Form  instrucao={instrucao} instructionToEnter={instructionToEnter} setInstructionToEnter={setInstructionToEnter} />
-                    </Grid>
-                   
-                    <Grid item xs={2}>
-                        <Button 
-                        onClick={()=> {
-                            let ct=0;
-                            if(instructionToEnter.instructionId===null)ct+=1
-                            if(instructionToEnter.reg1===null)ct+=1
-                            if(instructionToEnter.reg2===null)ct+=1
-                            if(instructionToEnter.regDest===null)ct+=1
-                            if(instructionToEnter.imm===null)ct+=1
-                            if(ct>1){
-                                showErrorToast('Please fill in all fields to add the instruction.');
-                            }
-                            else{
-                                addInstruction(instructionToEnter)
-                            }
-                        }}
-                         sx={{color:'black',border:'1px solid transparent',backgroundColor:'#e87624'}}
-                         >
-                            Adicionar
-                        </Button>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <Button onClick={()=>handleNext()} sx={{color:'black',border:'1px solid transparent',backgroundColor:'#e87624'}}>Próximo</Button>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Box sx={{ display: 'flex', height: '18%', justifyContent: 'center',width:'400px',ml:38 }}>
-                            {
-                                stages.map((stage: IStage) => (
-                                    <img src={getInstructionImage(stage)} style={{ maxWidth: '100%' }}/>
-                                ))
-                            }
-                        </Box>
-                    </Grid>
-
-                </Grid>
-
-            </Grid>
-            <Grid item xs={4}>
-                
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px', flexGrow: 2 }}>
-                    <PipeTable
-                        firstColumn='Endereço'
-                        secondColumn='Instrução'
-                        rows={
-                            instructionMemory.map(el => { return { code: String(el.address), value: el.syntax } })
-                        }
-                    />
-                    <PipeTable
-                        firstColumn='Endereço'
-                        secondColumn='Conteúdo da Memória'
-                        rows={
-                            dataMemory.map(el => { return { code: String(el.address), value: el.value } })
-                        } 
-                    />
-                    <PipeTable
-                        firstColumn='Nome'
-                        secondColumn='Conteúdo do Registrador'
-                        rows={
-                            registers.map(el => { return { code: String(el.name), value: el.value } })
-                        } 
-                    />
-                </Box>         
-            </Grid>
-
-            {ciclos.map((data: any,index: number)=>(                    
-                <Grid key={index} item xs={4}>
-                    <Typography sx={{fontWeight:600}}>Ciclo {index}</Typography>
-                    <Table>
-                        <TableHead sx={{ bgcolor: '#e87624' }}>
-                            <TableRow>
-                                <TableCell sx={{ fontSize: '1.05em', padding: '10px', textAlign: 'center' }}>Registrador</TableCell>
-                                <TableCell sx={{ fontSize: '1.05em', padding: '10px', textAlign: 'center' }}>Valor</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody sx={{ bgcolor: 'white' }} >
-                            {
-                                data.map((registrador: any,index:number)=>(
-                                    <TableRow key={index}>
-                                        <TableCell sx={{ padding: '5px', textAlign: 'center' }}>{(registrador.code).toUpperCase().replace('_','/').replace(/_/g, " ")}</TableCell>
-                                        <TableCell sx={{ padding: '5px', textAlign: 'center' }}>{registrador.value !== null ? registrador.value : "Don't Care"}</TableCell>
-                                    </TableRow>
-                                ))
-                            }
-                        </TableBody>
-                    </Table>
-                </Grid>
-            ))}
+        <Box sx={{ height:'100%', backgroundColor: '#ffdb74',padding:'20px 50px', maxWidth: '100vw', overflowX: 'hidden'}}>
             
-            {/* <Grid item xs={12} >
-                <Box sx={{ display: 'flex', height: '18%', overflow: 'auto', justifyContent: 'center' }}>
-                    {
-                        stages.map((stage: IStage) => (
-                            <img src={getInstructionImage(stage)} style={{ maxWidth: '100%' }}/>
-                        ))
-                    }
-                </Box>
-            </Grid> */}
-        
-        </Grid>
+            <Grid container 
+                sx={{
+                    padding:'10px',
+                }}
+                spacing={2}
+            >
+                <Grid item xs={12}>
+                    <Grid container spacing={2} >
+                       
+                        <Grid item xs={12}>
+                            <Box sx={{  display: 'flex', gap: '10px',height:'730px' }}>
+                                <Box >
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={3} >
+                                            <Autocomplete
+                                                options={BASIC_INSTRUCTIONS}
+                                                getOptionLabel={(instruction) => instruction.name}
+                                                size='small'
+                                                fullWidth
+                                                renderInput={(params) => 
+                                                <TextField
+                                                 {...params} 
+                                                 label="Instrução"
+                                                 sx={{
+                                                    '& .MuiOutlinedInput-root': {
+                                                      '& fieldset': {
+                                                        borderColor: '#e87624', // Cor da borda
+                                                      },
+                                                      '&:hover fieldset': {
+                                                        borderColor: '#e87624', // Cor da borda no hover
+                                                      },
+                                                      '&.Mui-focused fieldset': {
+                                                        borderColor: '#e87624', // Cor da borda no foco
+                                                        borderWidth: '2px', // Espessura da borda no foco
+                                                      },
+                                                      '& input': {
+                                                        color: '#330708', // Cor do texto
+                                                      }
+                                                    },
+                                                    '& .MuiInputLabel-root': {
+                                                      color: '#e87624', // Cor do label
+                                                    },
+                                                    '& .MuiInputLabel-root.Mui-focused': {
+                                                      color: '#e87624', // Cor do label no foco
+                                                    }
+                                                  }}
+                                                
+                                                
+                                                />}
+                                                onChange={(_,newValue) =>{
+                                                    setInstrucao(newValue ? newValue.name :null)
+                                                
+                                                    if(newValue){
+                                                        setInstructionToEnter({
+                                                            instructionId : newValue.id,
+                                                            imm:null,
+                                                            reg1:null,
+                                                            reg2:null,
+                                                            regDest:null,
+                                                        });
+                                                    }
+                                                }}
+                                                noOptionsText="None instruction is available"
+                                            />
+                                        </Grid>
+                                        <Grid item xs={9}>
+                                            <Box sx={{display:'flex',gap:2}}>
+                                                <Button onClick={()=>resetSimulatorData()} sx={{
+                                                    color:'black',border:'1px solid transparent',
+                                                    backgroundColor:'#e87624',
+                                                    padding:'5px 20px',
+                                                    transition: 'transform 0.3s ease-in-out', // Adiciona a transição
+                                                    '&:hover': {
+                                                    transform: 'scale(1.05)', // Cresce o botão em 5%
+                                                    backgroundColor: '#e87624', // Mantém a cor original para desativar o hover padrão
+                                                    }
+                                                }}>
+                                                    Apagar dados
+                                                </Button>
+
+                                                < Button onClick={()=>resetInstructions()} sx={{
+                                                    color:'black',border:'1px solid transparent',
+                                                    backgroundColor:'#e87624',
+                                                    padding:'5px 20px',
+                                                    transition: 'transform 0.3s ease-in-out', // Adiciona a transição
+                                                    '&:hover': {
+                                                    transform: 'scale(1.05)', // Cresce o botão em 5%
+                                                    backgroundColor: '#e87624', // Mantém a cor original para desativar o hover padrão
+                                                    }
+                                                }}>
+                                                    Apagar Instruções
+                                                </Button>
+
+                                                <Button onClick={()=>resetProgramCounter()} sx={{
+                                                    color:'black',border:'1px solid transparent',
+                                                    backgroundColor:'#e87624',
+                                                    padding:'5px 20px',
+                                                    transition: 'transform 0.3s ease-in-out', // Adiciona a transição
+                                                    '&:hover': {
+                                                    transform: 'scale(1.05)', // Cresce o botão em 5%
+                                                    backgroundColor: '#e87624', // Mantém a cor original para desativar o hover padrão
+                                                    }
+                                                }}>
+                                                    Resetar PC
+                                                </Button>
+
+                                                <Button onClick={()=>resetCiclos()} sx={{
+                                                    color:'black',border:'1px solid transparent',
+                                                    backgroundColor:'#e87624',
+                                                    padding:'5px 20px',
+                                                    transition: 'transform 0.3s ease-in-out', // Adiciona a transição
+                                                    '&:hover': {
+                                                    transform: 'scale(1.05)', // Cresce o botão em 5%
+                                                    backgroundColor: '#e87624', // Mantém a cor original para desativar o hover padrão
+                                                    }
+                                                }}>
+                                                    Apagar ciclos
+                                                </Button>
+                                            </Box>
+                                        </Grid>
+                                        
+                                     
+                                        { instrucao!==null && instrucao!==undefined && <>
+                                            <Grid item xs={7}>
+                                                <Form  instrucao={instrucao} instructionToEnter={instructionToEnter} setInstructionToEnter={setInstructionToEnter} />
+                                            </Grid>
+                                
+                                            <Grid item xs={5}>
+                                                <Box sx={{width:'100%',display:'flex',gap:2}}>
+                                                    <Button 
+                                                        onClick={()=> {
+                                                            let ct=0;
+                                                            if(instructionToEnter.instructionId===null)ct+=1
+                                                            if(instructionToEnter.reg1===null)ct+=1
+                                                            if(instructionToEnter.reg2===null)ct+=1
+                                                            if(instructionToEnter.regDest===null)ct+=1
+                                                            if(instructionToEnter.imm===null)ct+=1
+                                                            if(ct>1){
+                                                                showErrorToast('Por favor, preencha todos os campos !');
+                                                            }
+                                                            else{
+                                                                setAd(!ad);
+                                                                addInstruction(instructionToEnter)
+                                                            }
+                                                        }}
+                                                        sx={{color:'black',
+                                                            border:'1px solid transparent',
+                                                            backgroundColor:'#e87624',
+                                                            padding:'5px 20px',
+                                                            transition: 'transform 0.3s ease-in-out', // Adiciona a transição
+                                                            '&:hover': {
+                                                            transform: 'scale(1.05)', // Cresce o botão em 5%
+                                                            backgroundColor: '#e87624', // Mantém a cor original para desativar o hover padrão
+                                                            }
+                                                        }}
+                                                    >
+                                                        Adicionar
+                                                    </Button>
+                                                    <Button 
+                                                        onClick={()=>handleNext()} 
+                                                        sx={{
+                                                            color:'black',border:'1px solid transparent',
+                                                            backgroundColor:'#e87624',
+                                                            padding:'5px 20px',
+                                                            transition: 'transform 0.3s ease-in-out', // Adiciona a transição
+                                                            '&:hover': {
+                                                            transform: 'scale(1.05)', // Cresce o botão em 5%
+                                                            backgroundColor: '#e87624', // Mantém a cor original para desativar o hover padrão
+                                                            }
+                                                            
+                                                        }}
+                                                        disabled={disableNext}
+                                                    >
+                                                        Próximo Ciclo
+                                                    </Button>
+                                                </Box>
+                                            </Grid>
+                                        </>
+                                        }
+                                    </Grid>
+                                    <Box sx={{height:'615px',mt:2}}>
+                                        <Box sx={{ display: 'flex', height: '100%' }}>
+                                            {
+                                                stages.map((stage: IStage,index:number) => (
+                                                    <img key={index} src={getInstructionImage(stage)} />
+                                                ))
+                                            }
+                                        </Box>
+                                    </Box>
+                                </Box>
+
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                    <InstructionMemoryTable
+                                        firstColumn='PC'
+                                        secondColumn='Instrução'
+                                        rows={
+                                            instructionMemory.map(el => { return { code: String(el.address), value: el.syntax } })
+                                        }
+                                        programCounter={
+                                            stages.find(el => el.instructionAddress !== null)?.instructionAddress ?? undefined
+                                        }
+                                    />
+                                    <EditTable
+                                        firstColumn='Endereço'
+                                        secondColumn='Conteúdo da Memória'
+                                        rows={
+                                            dataMemory.map(el => { return { code: String(el.address), value: el.value } })
+                                        }
+                                        setter={setDataMemory}
+                                        isNumber={true}
+                                    />
+                                    <EditTable
+                                        firstColumn='Nome'
+                                        secondColumn='Conteúdo do Registrador'
+                                        rows={
+                                            registers.map(el => { return { code: String(el.name), value: el.value } })
+                                        }
+                                        setter={setRegisters}
+                                        isNumber={false}
+                                    />
+                                </Box>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </Grid>
+
+                {ciclos.map((data: any,index: number)=>(                    
+                    <Grid key={index} item xs={4}>
+                        <Typography sx={{fontWeight:600}}>Ciclo {index}</Typography>
+                        <Table>
+                            <TableHead sx={{ bgcolor: '#e87624' }}>
+                                <TableRow>
+                                    <TableCell sx={{ fontSize: '1.05em', padding: '10px', textAlign: 'center' }}>Registrador</TableCell>
+                                    <TableCell sx={{ fontSize: '1.05em', padding: '10px', textAlign: 'center' }}>Valor</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody sx={{ bgcolor: 'white' }} >
+                                {
+                                    data.map((registrador: any,index:number)=>(
+                                        <TableRow key={index}>
+                                            <TableCell sx={{ padding: '5px', textAlign: 'center' }}>{(registrador.code).toUpperCase().replace('_','/').replace(/_/g, " ")}</TableCell>
+                                            <TableCell sx={{ padding: '5px', textAlign: 'center' }}>{registrador.value !== null ? registrador.value : "Don't Care"}</TableCell>
+                                        </TableRow>
+                                    ))
+                                }
+                            </TableBody>
+                        </Table>
+                    </Grid>
+                ))}
+            </Grid>
+            
+        </Box>
     </>);
 };
 

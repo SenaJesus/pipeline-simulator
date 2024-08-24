@@ -17,7 +17,6 @@ const Add =
         reg2: string,
         regDest: string
     ) => {
-        console.log('entrando no add e fazendo os bagulho')
         const if_id_pc = stagesData.find(el => el.code === 'if_id_pc')?.value;
         const reg1Value = registers.find(el => el.name === reg1)?.value;
         const reg2Value = registers.find(el => el.name === reg2)?.value;
@@ -54,7 +53,8 @@ const Add =
     },
     MemToWb: (
         stagesData: IStageData[],
-        setStagesData: Dispatch<SetStateAction<IStageData[]>>
+        setStagesData: Dispatch<SetStateAction<IStageData[]>>,
+        setRegisters: Dispatch<SetStateAction<IRegisterMemory[]>>
     ) => {
         const ex_mem_rd = stagesData.find(el => el.code === 'ex_mem_rd')?.value;
         const ex_mem_alu_output = stagesData.find(el => el.code === 'ex_mem_alu_output')?.value;
@@ -67,14 +67,9 @@ const Add =
                 return el;
             })
         );
-    },
-    Wb: (stagesData: IStageData[], setRegisters: Dispatch<SetStateAction<IRegisterMemory[]>>) => {
-        const mem_wb_alu_output = stagesData.find(el => el.code === 'mem_wb_alu_output')?.value;
-        const mem_wb_rd = stagesData.find(el => el.code === 'mem_wb_rd')?.value;
-        if (mem_wb_alu_output === undefined || mem_wb_rd === undefined) return;
         setRegisters(data =>
             data.map(el => {
-                if (el.name === mem_wb_rd) el.value = Number(mem_wb_alu_output);
+                if (el.name === ex_mem_rd) el.value = Number(ex_mem_alu_output);
                 return el;
             })
         );
@@ -111,12 +106,7 @@ const Add =
         if (stageNumber === MEMORY_STAGE_ID) {
             Add.MemToWb(
                 stagesData,
-                setStagesData
-            );
-        };
-        if (stageNumber === WRITE_BACK_STAGE_ID) {
-            Add.Wb(
-                stagesData,
+                setStagesData,
                 setRegisters
             );
         };

@@ -1,5 +1,5 @@
 
-import { Grid, TextField, MenuItem, Autocomplete } from '@mui/material';
+import { Grid, TextField, MenuItem, Autocomplete} from '@mui/material';
 import { useState,useEffect } from 'react';
 
 const options = [
@@ -16,7 +16,6 @@ const options = [
     { name: 't2', value: 1 },
     { name: 't3', value: 1 }
 ];
-
 
 interface FormProps {
     instrucao: any,
@@ -54,7 +53,35 @@ const Form = ({
                             size='small'
                             fullWidth
                             value={regDest}
-                            renderInput={(params) => <TextField {...params} label='Registrador destino' name='regDest' />}
+                            renderInput={(params) => 
+                            <TextField 
+                            {...params}
+                            sx={{
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                                borderColor: '#e87624', // Cor da borda
+                                            },
+                                        '&:hover fieldset': {
+                                            borderColor: '#e87624', // Cor da borda no hover
+                                        },
+                                      '&.Mui-focused fieldset': {
+                                            borderColor: '#e87624', // Cor da borda no foco
+                                            borderWidth: '2px', // Espessura da borda no foco
+                                        },
+                                        '& input': {
+                                            color: '#330708', // Cor do texto
+                                        }
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                    color: '#e87624', // Cor do label
+                                    },
+                                    '& .MuiInputLabel-root.Mui-focused': {
+                                        color: '#e87624', // Cor do label no foco
+                                    }
+                            }}
+                            
+                            
+                            label='Registrador destino' name='regDest' />}
                             onChange={(event,newValue) =>{
                                 setRegDest(newValue);
                                 if(newValue){
@@ -79,7 +106,35 @@ const Form = ({
                             size='small'
                             fullWidth
                             value={reg1}
-                            renderInput={(params) => <TextField {...params} label='Registrador 1' name='reg1' />}
+                            renderInput={(params) => 
+                            <TextField 
+                            {...params}
+                            sx={{
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                                borderColor: '#e87624', // Cor da borda
+                                            },
+                                        '&:hover fieldset': {
+                                            borderColor: '#e87624', // Cor da borda no hover
+                                        },
+                                      '&.Mui-focused fieldset': {
+                                            borderColor: '#e87624', // Cor da borda no foco
+                                            borderWidth: '2px', // Espessura da borda no foco
+                                        },
+                                        '& input': {
+                                            color: '#330708', // Cor do texto
+                                        }
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                    color: '#e87624', // Cor do label
+                                    },
+                                    '& .MuiInputLabel-root.Mui-focused': {
+                                        color: '#e87624', // Cor do label no foco
+                                    }
+                            }}
+                            
+                            
+                            label='Registrador 1' name='reg1' />}
                             onChange={(event,newValue) =>{
                                 setReg1(newValue);
                                 if(newValue){
@@ -104,7 +159,35 @@ const Form = ({
                             size='small'
                             fullWidth
                             value={reg2}
-                            renderInput={(params) => <TextField {...params} label='Registrador 2' name='reg2' />}
+                            renderInput={(params) => 
+                            <TextField 
+                            {...params}
+                            sx={{
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                                borderColor: '#e87624', // Cor da borda
+                                            },
+                                        '&:hover fieldset': {
+                                            borderColor: '#e87624', // Cor da borda no hover
+                                        },
+                                      '&.Mui-focused fieldset': {
+                                            borderColor: '#e87624', // Cor da borda no foco
+                                            borderWidth: '2px', // Espessura da borda no foco
+                                        },
+                                        '& input': {
+                                            color: '#330708', // Cor do texto
+                                        }
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                    color: '#e87624', // Cor do label
+                                    },
+                                    '& .MuiInputLabel-root.Mui-focused': {
+                                        color: '#e87624', // Cor do label no foco
+                                    }
+                            }}
+                            
+                            
+                            label='Registrador 2' name='reg2' />}
                             onChange={(event,newValue) =>{
                                 setReg2(newValue);
                                 if(newValue){
@@ -135,7 +218,35 @@ const Form = ({
                             size='small'
                             fullWidth
                             value={regDest}
-                            renderInput={(params) => <TextField {...params} label='Registrador destino' name='regDest' />}
+                            renderInput={(params) => 
+                            <TextField 
+                            {...params}
+                            sx={{
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                                borderColor: '#e87624', // Cor da borda
+                                            },
+                                        '&:hover fieldset': {
+                                            borderColor: '#e87624', // Cor da borda no hover
+                                        },
+                                      '&.Mui-focused fieldset': {
+                                            borderColor: '#e87624', // Cor da borda no foco
+                                            borderWidth: '2px', // Espessura da borda no foco
+                                        },
+                                        '& input': {
+                                            color: '#330708', // Cor do texto
+                                        }
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                    color: '#e87624', // Cor do label
+                                    },
+                                    '& .MuiInputLabel-root.Mui-focused': {
+                                        color: '#e87624', // Cor do label no foco
+                                    }
+                            }}
+                            
+                            
+                            label='Registrador destino' name='regDest' />}
                             onChange={(event,newValue) =>{
                                 setRegDest(newValue)
                                 if(newValue){
@@ -161,7 +272,35 @@ const Form = ({
                             size='small'
                             fullWidth
                             value={reg1}
-                            renderInput={(params) => <TextField {...params} label='Registrador 1' name='reg1' />}
+                            renderInput={(params) => 
+                            <TextField 
+                            {...params}
+                            sx={{
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                                borderColor: '#e87624', // Cor da borda
+                                            },
+                                        '&:hover fieldset': {
+                                            borderColor: '#e87624', // Cor da borda no hover
+                                        },
+                                      '&.Mui-focused fieldset': {
+                                            borderColor: '#e87624', // Cor da borda no foco
+                                            borderWidth: '2px', // Espessura da borda no foco
+                                        },
+                                        '& input': {
+                                            color: '#330708', // Cor do texto
+                                        }
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                    color: '#e87624', // Cor do label
+                                    },
+                                    '& .MuiInputLabel-root.Mui-focused': {
+                                        color: '#e87624', // Cor do label no foco
+                                    }
+                            }}
+                            
+                            
+                            label='Registrador 1' name='reg1' />}
                             onChange={(event,newValue) =>{
                                 setReg1(newValue);
                                 if(newValue){
@@ -186,8 +325,31 @@ const Form = ({
                             type='number'
                             fullWidth
                             name='imm'
-                            value={imm}
+                            value={imm ? imm:''}
                             label='Imediato'
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                  '& fieldset': {
+                                    borderColor: '#e87624', // Cor da borda
+                                  },
+                                  '&:hover fieldset': {
+                                    borderColor: '#e87624', // Cor da borda no hover
+                                  },
+                                  '&.Mui-focused fieldset': {
+                                    borderColor: '#e87624', // Cor da borda no foco
+                                    borderWidth: '2px', // Espessura da borda no foco
+                                  },
+                                  '& input': {
+                                    color: '#330708', // Cor do texto
+                                  }
+                                },
+                                '& .MuiInputLabel-root': {
+                                  color: '#e87624', // Cor do label
+                                },
+                                '& .MuiInputLabel-root.Mui-focused': {
+                                  color: '#e87624', // Cor do label no foco
+                                }
+                              }}
                             onChange={(e)=>{
                                 setImm(e.target.value);
                                 if(e.target.value){
@@ -217,7 +379,35 @@ const Form = ({
                             size='small'
                             fullWidth
                             value={reg1}
-                            renderInput={(params) => <TextField {...params} label='Registrador 1' name='reg1' />}
+                            renderInput={(params) => 
+                            <TextField 
+                            {...params}
+                            sx={{
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                                borderColor: '#e87624', // Cor da borda
+                                            },
+                                        '&:hover fieldset': {
+                                            borderColor: '#e87624', // Cor da borda no hover
+                                        },
+                                      '&.Mui-focused fieldset': {
+                                            borderColor: '#e87624', // Cor da borda no foco
+                                            borderWidth: '2px', // Espessura da borda no foco
+                                        },
+                                        '& input': {
+                                            color: '#330708', // Cor do texto
+                                        }
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                    color: '#e87624', // Cor do label
+                                    },
+                                    '& .MuiInputLabel-root.Mui-focused': {
+                                        color: '#e87624', // Cor do label no foco
+                                    }
+                            }}
+                            
+                            
+                            label='Registrador 1' name='reg1' />}
                             onChange={(event,newValue) =>{
                                 setReg1(newValue)
                                 if(newValue){
@@ -243,7 +433,35 @@ const Form = ({
                             size='small'
                             fullWidth
                             value={reg2}
-                            renderInput={(params) => <TextField {...params} label='Registrador 2' name='reg2' />}
+                            renderInput={(params) => 
+                            <TextField 
+                            {...params}
+                            sx={{
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                                borderColor: '#e87624', // Cor da borda
+                                            },
+                                        '&:hover fieldset': {
+                                            borderColor: '#e87624', // Cor da borda no hover
+                                        },
+                                      '&.Mui-focused fieldset': {
+                                            borderColor: '#e87624', // Cor da borda no foco
+                                            borderWidth: '2px', // Espessura da borda no foco
+                                        },
+                                        '& input': {
+                                            color: '#330708', // Cor do texto
+                                        }
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                    color: '#e87624', // Cor do label
+                                    },
+                                    '& .MuiInputLabel-root.Mui-focused': {
+                                        color: '#e87624', // Cor do label no foco
+                                    }
+                            }}
+                            
+                            
+                            label='Registrador 2' name='reg2' />}
                             onChange={(event,newValue) =>{
                                 setReg2(newValue)
                                 if(newValue){
@@ -268,8 +486,31 @@ const Form = ({
                             type='number'
                             fullWidth
                             name='imm'
-                            value={imm}
+                            value={imm ? imm:''}
                             label='Imediato'
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                  '& fieldset': {
+                                    borderColor: '#e87624', // Cor da borda
+                                  },
+                                  '&:hover fieldset': {
+                                    borderColor: '#e87624', // Cor da borda no hover
+                                  },
+                                  '&.Mui-focused fieldset': {
+                                    borderColor: '#e87624', // Cor da borda no foco
+                                    borderWidth: '2px', // Espessura da borda no foco
+                                  },
+                                  '& input': {
+                                    color: '#330708', // Cor do texto
+                                  }
+                                },
+                                '& .MuiInputLabel-root': {
+                                  color: '#e87624', // Cor do label
+                                },
+                                '& .MuiInputLabel-root.Mui-focused': {
+                                  color: '#e87624', // Cor do label no foco
+                                }
+                              }}
                             onChange={(e)=>{
                                 setImm(e.target.value)
                                 if(e.target.value){

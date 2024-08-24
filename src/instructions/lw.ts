@@ -3,7 +3,8 @@ import { IRegisterMemory, IStageData, IDataMemory } from '../interfaces/datapath
 import {
     INSTRUCTION_DECODE_STAGE_ID,
     EXECUTION_STAGE_ID,
-    MEMORY_STAGE_ID
+    MEMORY_STAGE_ID,
+    WRITE_BACK_STAGE_ID
 } from '../constants/datapathConstants';
 
 const Lw =
@@ -76,20 +77,6 @@ const Lw =
             })
         );
     },
-    Wb: (
-        stagesData: IStageData[],
-        setRegisters: Dispatch<SetStateAction<IRegisterMemory[]>>
-    ) => {
-        const mem_wb_lmd = stagesData.find(el => el.code === 'mem_wb_lmd')?.value;
-        const mem_wb_rd = stagesData.find(el => el.code === 'mem_wb_rd')?.value;
-        if (mem_wb_lmd === undefined || mem_wb_rd === undefined) return;
-        setRegisters(data =>
-            data.map(el => {
-                if (el.name === mem_wb_rd) el.value = Number(mem_wb_lmd);
-                return el;
-            })
-        );
-    },
     Execute: (
         stageNumber: number,
         stagesData: IStageData[],
@@ -103,7 +90,6 @@ const Lw =
         regDest: string,
         imm: number
     ) => {
-        console.log(11111);
         if (stageNumber === INSTRUCTION_DECODE_STAGE_ID) {
             Lw.IdToEx(
                 stagesData,
