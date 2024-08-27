@@ -1,6 +1,6 @@
 {
   "name": "pipeline_simulator",
-  "homepage": "https://SenaJesus.github.io/pipeline-simulator/", 
+  "homepage": "https://SenaJesus.github.io/pipeline-simulator/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -15,6 +15,7 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "gh-pages": "^6.1.1",
+    "notistack": "^3.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",

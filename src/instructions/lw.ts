@@ -3,8 +3,7 @@ import { IRegisterMemory, IStageData, IDataMemory } from '../interfaces/datapath
 import {
     INSTRUCTION_DECODE_STAGE_ID,
     EXECUTION_STAGE_ID,
-    MEMORY_STAGE_ID,
-    WRITE_BACK_STAGE_ID
+    MEMORY_STAGE_ID
 } from '../constants/datapathConstants';
 
 const Lw =
@@ -60,8 +59,7 @@ const Lw =
         const ex_mem_rd = stagesData.find(el => el.code === 'ex_mem_rd')?.value;
         const ex_mem_alu_output = stagesData.find(el => el.code === 'ex_mem_alu_output')?.value;
         if (ex_mem_rd === undefined || ex_mem_alu_output === undefined) return;
-        const memoryData = dataMemory.find(el => el.address === ex_mem_alu_output)?.value;
-        if (memoryData === undefined) return;
+        const memoryData = dataMemory.find(el => el.address === ex_mem_alu_output)?.value ?? 0;
         setStagesData(data =>
             data.map(el => {
                 if (el.code === 'mem_wb_lmd') el.value = memoryData;

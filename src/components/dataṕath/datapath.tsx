@@ -1,6 +1,6 @@
 
 import InstructionMemoryTable from '../instructionMemoryTable/instructionMemoryTable';
-import { Box, Grid, Typography, Button, TextField, Autocomplete,Container } from '@mui/material';
+import { Box, Grid, Typography, Button, TextField, Autocomplete } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { IInstruction, IStage, IInstructionMemory, IDataMemory, IRegisterMemory, IStageData, IAddInstruction } from '../../interfaces/datapathInterfaces';
 import {
@@ -10,17 +10,19 @@ import {
     INITIAL_DATA_MEMORY,
     INITIAL_STAGES_DATA,
     INSTRUCTION_FETCH_STAGE_ID,
-    INSTRUCTION_DECODE_STAGE_ID
+    INSTRUCTION_DECODE_STAGE_ID,
+    LOAD_WORD_ID,
+    STORE_WORD_ID
 } from '../../constants/datapathConstants';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import Form from '../form/form';
-import { toast } from 'react-toastify';
-import ToastError from '../toastError/toastError';
-import 'react-toastify/dist/ReactToastify.css';
 import EditTable from '../editTable/editTable';
+import { useSnackbar } from 'notistack';
+import DataMemoryTable from '../dataMemoryTable/dataMemoryTable';
 
 
 const Datapath = () => {
+    const { enqueueSnackbar } = useSnackbar();
     const [stages, setStages] = useState<IStage[]>(INITIAL_STAGES);
     const [pc, setPc] = useState<number>(0);
     const [registers, setRegisters] = useState<IRegisterMemory[]>(INITIAL_REGISTERS);
@@ -42,7 +44,18 @@ const Datapath = () => {
         regDest:null,
     });
 
+    const verifyDataMemoryAddressLimit = (addInstructionObj: IAddInstruction) => {
+        const regValue = addInstructionObj.instructionId === LOAD_WORD_ID ?
+            registers.find(el => el.name === addInstructionObj.reg1)?.value :
+            registers.find(el => el.name === addInstructionObj.reg2)?.value;
+        return ((regValue ?? 0) + (addInstructionObj.imm ?? 0)) > 1000;
+    };
+
     const addInstruction = (addInstructionObj: IAddInstruction) => {
+        if (
+            (addInstructionObj.instructionId === LOAD_WORD_ID || addInstructionObj.instructionId === STORE_WORD_ID) &&
+            verifyDataMemoryAddressLimit(addInstructionObj)
+        ) return showErrorToast("O último endereço da memória é 1000!");
         const instruction = BASIC_INSTRUCTIONS.find(el => el.id === addInstructionObj.instructionId);
         if (instruction === undefined) return;
         setInstructionMemory(data =>
@@ -109,15 +122,11 @@ const Datapath = () => {
     };
 
     const showErrorToast = (message: string) => {
-        toast(message, {
-            position: 'top-center',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+        enqueueSnackbar(message, { variant: 'error' });
+    };
+
+    const showInfoToast = (message: string) => {
+        enqueueSnackbar(message, { variant: 'info' });
     };
 
     const getInstructionFromStage = (stage: IStage | undefined): IInstruction | null => {
@@ -150,7 +159,6 @@ const Datapath = () => {
 
     const handleNext = () =>{
         let pc_real: number;
-         // quando vai ser?
          
         const newStages = [...stages];
       
@@ -191,14 +199,13 @@ const Datapath = () => {
             setStages(newStages)
         }
         else {
-            showErrorToast('Hazard detected, stages 1 and 2 have been frozen!');
+            showInfoToast('Hazard detectado, estágios 1 e 2 foram congelados!');
             for (let i = newStages.length - 1; i > 2; i--) {
                 newStages[i].instructionAddress = newStages[i - 1].instructionAddress;
             };
             newStages[2].instructionAddress = null;
             setStages(newStages);
         };
-        const pcValue = stagesData.find(el => el.code === 'if_id_pc');
         setHandleNextButton(true);
     };
 
@@ -216,8 +223,7 @@ const Datapath = () => {
 
     const handleDisabledNextClock = () => stages.every(el => el.instructionAddress === null) && !instructionMemory.find(el => el.address === pc);
 
-    return (<>
-        <ToastError />
+    return (
         <Box sx={{ height:'100%', backgroundColor: '#ffdb74',padding:'20px 50px', maxWidth: '100vw', overflowX: 'hidden'}}>
             
             <Grid container 
@@ -246,24 +252,24 @@ const Datapath = () => {
                                                  sx={{
                                                     '& .MuiOutlinedInput-root': {
                                                       '& fieldset': {
-                                                        borderColor: '#e87624', // Cor da borda
+                                                        borderColor: '#e87624',
                                                       },
                                                       '&:hover fieldset': {
-                                                        borderColor: '#e87624', // Cor da borda no hover
+                                                        borderColor: '#e87624',
                                                       },
                                                       '&.Mui-focused fieldset': {
-                                                        borderColor: '#e87624', // Cor da borda no foco
-                                                        borderWidth: '2px', // Espessura da borda no foco
+                                                        borderColor: '#e87624',
+                                                        borderWidth: '2px',
                                                       },
                                                       '& input': {
-                                                        color: '#330708', // Cor do texto
+                                                        color: '#330708',
                                                       }
                                                     },
                                                     '& .MuiInputLabel-root': {
-                                                      color: '#e87624', // Cor do label
+                                                      color: '#e87624',
                                                     },
                                                     '& .MuiInputLabel-root.Mui-focused': {
-                                                      color: '#e87624', // Cor do label no foco
+                                                      color: '#e87624',
                                                     }
                                                   }}
                                                 
@@ -291,10 +297,10 @@ const Datapath = () => {
                                                     color:'black',border:'1px solid transparent',
                                                     backgroundColor:'#e87624',
                                                     padding:'5px 20px',
-                                                    transition: 'transform 0.3s ease-in-out', // Adiciona a transição
+                                                    transition: 'transform 0.3s ease-in-out',
                                                     '&:hover': {
-                                                    transform: 'scale(1.05)', // Cresce o botão em 5%
-                                                    backgroundColor: '#e87624', // Mantém a cor original para desativar o hover padrão
+                                                    transform: 'scale(1.05)',
+                                                    backgroundColor: '#e87624',
                                                     }
                                                 }}>
                                                     Apagar dados
@@ -304,10 +310,10 @@ const Datapath = () => {
                                                     color:'black',border:'1px solid transparent',
                                                     backgroundColor:'#e87624',
                                                     padding:'5px 20px',
-                                                    transition: 'transform 0.3s ease-in-out', // Adiciona a transição
+                                                    transition: 'transform 0.3s ease-in-out',
                                                     '&:hover': {
-                                                    transform: 'scale(1.05)', // Cresce o botão em 5%
-                                                    backgroundColor: '#e87624', // Mantém a cor original para desativar o hover padrão
+                                                    transform: 'scale(1.05)',
+                                                    backgroundColor: '#e87624',
                                                     }
                                                 }}>
                                                     Apagar Instruções
@@ -317,10 +323,10 @@ const Datapath = () => {
                                                     color:'black',border:'1px solid transparent',
                                                     backgroundColor:'#e87624',
                                                     padding:'5px 20px',
-                                                    transition: 'transform 0.3s ease-in-out', // Adiciona a transição
+                                                    transition: 'transform 0.3s ease-in-out',
                                                     '&:hover': {
-                                                    transform: 'scale(1.05)', // Cresce o botão em 5%
-                                                    backgroundColor: '#e87624', // Mantém a cor original para desativar o hover padrão
+                                                    transform: 'scale(1.05)',
+                                                    backgroundColor: '#e87624',
                                                     }
                                                 }}>
                                                     Resetar PC
@@ -330,10 +336,10 @@ const Datapath = () => {
                                                     color:'black',border:'1px solid transparent',
                                                     backgroundColor:'#e87624',
                                                     padding:'5px 20px',
-                                                    transition: 'transform 0.3s ease-in-out', // Adiciona a transição
+                                                    transition: 'transform 0.3s ease-in-out',
                                                     '&:hover': {
-                                                    transform: 'scale(1.05)', // Cresce o botão em 5%
-                                                    backgroundColor: '#e87624', // Mantém a cor original para desativar o hover padrão
+                                                    transform: 'scale(1.05)',
+                                                    backgroundColor: '#e87624',
                                                     }
                                                 }}>
                                                     Apagar ciclos
@@ -358,7 +364,7 @@ const Datapath = () => {
                                                             if(instructionToEnter.regDest===null)ct+=1
                                                             if(instructionToEnter.imm===null)ct+=1
                                                             if(ct>1){
-                                                                showErrorToast('Por favor, preencha todos os campos !');
+                                                                showErrorToast('Por favor, preencha todos os campos da instrução!');
                                                             }
                                                             else{
                                                                 setAd(!ad);
@@ -369,10 +375,10 @@ const Datapath = () => {
                                                             border:'1px solid transparent',
                                                             backgroundColor:'#e87624',
                                                             padding:'5px 20px',
-                                                            transition: 'transform 0.3s ease-in-out', // Adiciona a transição
+                                                            transition: 'transform 0.3s ease-in-out',
                                                             '&:hover': {
-                                                            transform: 'scale(1.05)', // Cresce o botão em 5%
-                                                            backgroundColor: '#e87624', // Mantém a cor original para desativar o hover padrão
+                                                            transform: 'scale(1.05)',
+                                                            backgroundColor: '#e87624',
                                                             }
                                                         }}
                                                     >
@@ -384,10 +390,10 @@ const Datapath = () => {
                                                             color:'black',border:'1px solid transparent',
                                                             backgroundColor:'#e87624',
                                                             padding:'5px 20px',
-                                                            transition: 'transform 0.3s ease-in-out', // Adiciona a transição
+                                                            transition: 'transform 0.3s ease-in-out',
                                                             '&:hover': {
-                                                            transform: 'scale(1.05)', // Cresce o botão em 5%
-                                                            backgroundColor: '#e87624', // Mantém a cor original para desativar o hover padrão
+                                                                transform: 'scale(1.05)',
+                                                                backgroundColor: '#e87624',
                                                             }
                                                             
                                                         }}
@@ -422,7 +428,7 @@ const Datapath = () => {
                                             stages.find(el => el.instructionAddress !== null)?.instructionAddress ?? undefined
                                         }
                                     />
-                                    <EditTable
+                                    <DataMemoryTable
                                         firstColumn='Endereço'
                                         secondColumn='Conteúdo da Memória'
                                         rows={
@@ -472,7 +478,7 @@ const Datapath = () => {
             </Grid>
             
         </Box>
-    </>);
+    );
 };
 
 export default Datapath;

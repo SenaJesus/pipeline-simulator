@@ -32,20 +32,10 @@ export const INITIAL_STAGES: IStage[] = [
     { number: 5, instructionAddress: null }
 ];
 
-export const INITIAL_DATA_MEMORY: IDataMemory[] = [
-    { address: 0, value: 10 },
-    { address: 10, value: 20 },
-    { address: 20, value: 30 },
-    { address: 30, value: 40 },
-    { address: 40, value: 50 },
-    { address: 50, value: 60 },
-    { address: 60, value: 70 },
-    { address: 70, value: 71 },
-    { address: 80, value: 72 },
-    { address: 90, value: 73 },
-    { address: 100, value: 74 },
-    { address: 110, value: 75 }
-];
+export const INITIAL_DATA_MEMORY: IDataMemory[] = [];
+for (let i = 0; i <= 1000; i++) {
+    INITIAL_DATA_MEMORY.push({ address: i, value: i <= 100 ? i + 10 : (i === 1000 ? 1010 : null) });
+};
 
 export const INITIAL_STAGES_DATA = [
     { code: 'if_id_pc', value: null },
@@ -70,3 +60,5 @@ export const INSTRUCTION_DECODE_STAGE_ID = 2;
 export const EXECUTION_STAGE_ID = 3;
 export const MEMORY_STAGE_ID = 4;
 export const WRITE_BACK_STAGE_ID = 5;
+export const LOAD_WORD_ID = 2;
+export const STORE_WORD_ID = 3;

@@ -59,38 +59,39 @@ const EditTable = ({
                 </TableHead>
                 <TableBody>
                 {
-                    rows.map((row, index) => (
-                        <TableRow key={index}>
-                            <TableCell sx={{ padding: '0px', textAlign: 'center' }}>{row.code}</TableCell>
-                            <TableCell sx={{ padding: '0px', textAlign: 'center' }}>
-                                <TextField
-                                    size='small'
-                                    fullWidth
-                                    variant="outlined"
-                                    InputProps={{
-                                        sx: {
-                                          height: '24px', // Define a altura do TextField
-                                          padding: '0 14px', // Ajusta o padding interno
-                                        }
-                                      }}
-                                    sx={{
-                                        '& .MuiFormHelperText-root': { color: '#e87624' },
-                                        '& .MuiOutlinedInput-root': {
-                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                              borderColor: '#e87624',
-                                              borderWidth: '1px'
+                    rows
+                        .map((row, index) => (
+                            <TableRow key={index}>
+                                <TableCell sx={{ padding: '0px', textAlign: 'center' }}>{row.code}</TableCell>
+                                <TableCell sx={{ padding: '0px', textAlign: 'center' }}>
+                                    <TextField
+                                        size='small'
+                                        fullWidth
+                                        variant="outlined"
+                                        InputProps={{
+                                            sx: {
+                                            height: '24px',
+                                            padding: '0 14px',
                                             }
-                                        },
-                                        '&:hover .MuiOutlinedInput-notchedOutline': {
-                                            borderColor: 'rgba(0, 0, 0, 0.23)',
-                                        }
-                                    }}
-                                    value={row.value}
-                                    onChange={(event) => handleChangeInput(row.code, event.target.value)}
-                                />
-                            </TableCell>
-                        </TableRow>
-                    ))
+                                        }}
+                                        sx={{
+                                            '& .MuiFormHelperText-root': { color: '#e87624' },
+                                            '& .MuiOutlinedInput-root': {
+                                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                borderColor: '#e87624',
+                                                borderWidth: '1px'
+                                                }
+                                            },
+                                            '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                borderColor: 'rgba(0, 0, 0, 0.23)',
+                                            }
+                                        }}
+                                        value={row.value}
+                                        onChange={(event) => handleChangeInput(row.code, event.target.value)}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        ))
                 }
                 </TableBody>
             </Table>
