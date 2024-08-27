@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/pipeline-simulator/static/css/main.31725597.css",
+    "main.js": "/pipeline-simulator/static/js/main.9f1da27a.js",
+    "static/js/453.751bfff4.chunk.js": "/pipeline-simulator/static/js/453.751bfff4.chunk.js",
+    "index.html": "/pipeline-simulator/index.html",
+    "main.31725597.css.map": "/pipeline-simulator/static/css/main.31725597.css.map",
+    "main.9f1da27a.js.map": "/pipeline-simulator/static/js/main.9f1da27a.js.map",
+    "453.751bfff4.chunk.js.map": "/pipeline-simulator/static/js/453.751bfff4.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.31725597.css",
+    "static/js/main.9f1da27a.js"
+  ]
+}
